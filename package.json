@@ -1,5 +1,5 @@
 {
-  "name": "tpl-convert",
+  "name": "@ali/xtpl-convert",
   "version": "0.0.1",
   "description": "tpl convert",
   "main": "index.js",
@@ -15,7 +15,9 @@
     "mz": "^2.4.0"
   },
   "dependencies": {
-    "tokenspliter": "0.0.4",
     "xtemplate": "^4.6.0"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npm.alibaba-inc.com"
   }
 }

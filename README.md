@@ -1,13 +1,23 @@
-### jst -> xtpl 简单的转换工具
+## jst -> xtpl 简单的转换工具
 
 * 由于jst语法比xtpl更自由，无法完全覆盖所有产品，只能简单转换常用规则
 * 规则枚举在index.js中
 * 输入为jst模板的字符串，输出为xtpl模板的字符串
 
+### install
+```
+npm install --save @ali/xtplConvert
+```
+
+### test
+```
+tnpm test
+```
+
 ### usage
 
 ```
-const xtplConvert = require('xtplConvert');
+const xtplConvert = require('@ali/xtplConvert');
 let outStr = xtplConvert(inStr);
 ```
 

@@ -1,6 +1,6 @@
 'use strict';
 
-let Tokenspliter = require('tokenspliter/index');
+let Tokenspliter = require('./tokenSplit/index');
 
 let tokenspliter = Tokenspliter([{
     type: 'assign',
