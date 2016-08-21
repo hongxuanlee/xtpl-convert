@@ -1,0 +1,61 @@
+{{ set ( type = page[0].item_type,jinbi = page[0].item_jinbi,liHeight = page[0].item_liheight,isshowdeclaration = page[0].isshowdeclaration,isShowShop = page[0].isShowShop,imgHeight = page[0].item_imgheight,isopenwindow = page[0].openwindow ) }}
+<div class="item-wrapper">
+  <ul class="clearfix li-wrapper">
+    {{# each(page)}}
+{{set (item = this)}}
+    <li class="item-02" style="min-height:{{  liHeight  }}rem">
+      {{# if ( isShowShop && isShowShop === 'true' ) }}
+      <a class="item-shop-02 J_hyperlink" href="{{  item.item_shop_activity_url  }}">
+        <span class="shop-name-02">{{  item.item_shop_title  }}</span>
+        <span class="shop-jiantou-02">&#xe604;</span>
+      </a>
+       {{/ if }} 
+      <div href="{{  item.item_url  }}"  aria-hidden="true" class="img-wrap-02 img-placeholder" style="height:{{  imgHeight  }}rem">
+        <a {{# if ( isopenwindow === 'true' ) }}class="J_hyperlink"  {{/ if }} href="{{  item.item_url  }}">
+          {{# if ( type === '2-square' || type === '2-square-desc' ) }}
+           <img data-network="Q50s100,Q30s100" alt="商品图片" class="J_LazyLoad" src="data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=" data-srcset="{{  item.item_pic  }}_180x180.jpg 1x,{{  item.item_pic  }}_350x350.jpg 2x">
+          {{ elseif (type === '2-shutu' || type === '2-shutu-desc')}}
+            <img data-network="Q50s100,Q30s100" alt="商品图片" class="J_LazyLoad" src="data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=" data-srcset="{{  item.item_pic  }}_190x190.jpg 1x,{{  item.item_pic  }}_460x460.jpg 2x">
+           {{/ if }} 
+        </a>
+
+        {{# if (  item.item_trade_num && item.item_trade_num!==0 && item.item_trade_num !== '0' ) }}
+            <p class="item-favorite-02">已售{{  item.item_trade_num  }}件</p>
+         {{/ if }} 
+
+        {{# if ( item.item_num === 0 || item.item_num === '0' ) }}
+        <div class="shouqing-icon">已售罄</div>
+         {{/ if }} 
+
+      </div>
+   
+      {{# if ( isshowdeclaration && isshowdeclaration==='true' ) }}
+        <p class="item-desc-02">{{  item.item_declaration  }}</p>
+       {{/ if }} 
+      <p class="item-title-02"><span>{{  item.item_title  }}</span></p>
+      <p class="item-current-price-02"><b class="jia-1212"> &nbsp;</b><span class="yen">&#65509;<span><span>{{  item.item_current_price  }}</span></p>
+
+       {{# if ( jinbi === 'true' || jinbi === true ) }}
+      <div class="item-jinbi">
+        {{# if ( item.item_deduction_amt ) }}
+        <div class="img-wrap"></div>
+        <span class="jinbi">淘金币再抵&#65509;<span class="jinbi-count">{{  item.item_deduction_amt  }}</span></span>
+         {{/ if }} 
+      </div>
+       {{/ if }} 
+
+      <p class="item-price-02"><del>&#65509;{{  item.item_price  }}</del></p>
+      {{# if ( item.item_num === 0 || item.item_num === "0" ) }}
+         <a class="item-shouqing-02 theme-btn-main" href="{{  item.item_url  }}">再去逛逛</a>
+      {{ else }}
+          {{# if (  item.shop_hongbao && item.shop_hongbao !== '0' && item.shop_hongbao !== 0 ) }}
+            <a class="item-hongbao-02 theme-btn-favour J_hyperlink" href="{{  item.item_shop_activity_url  }}">进店抢红包</a>
+            <a class="item-buy-02 theme-btn theme-btn-main" href="{{  item.item_url  }}">立即抢购</a>
+          {{ else }}
+              <a href="{{  item.item_url  }}" class="item-total-look theme-btn theme-btn-main">立即抢购</a>
+           {{/ if }} 
+       {{/ if }} 
+    </li>
+     {{/ each }} 
+  </ul>
+</div>

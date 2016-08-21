@@ -1,0 +1,43 @@
+<div class="item-wrapper">
+  <ul>
+    {{#each (page)}}
+    <li class="item">
+      {{#if(item_shop_activity_url && item_shop_activity_url.indexOf('?') !== -1)}}
+          {{set(item_shop_activity_url = item_shop_activity_url + '&cpp=0')}}
+      {{else}}
+      {{set(item_shop_activity_url = item_shop_activity_url + '?&cpp=0')}}
+      {{/if}}
+      <a href="{{item_shop_activity_url}}" class="item-shop J_hyperlink">
+          <span class="shop-name">{{item_shop_title}}<span>
+          <span class="shop-jiantou">&#xe604;</span>
+      </a>
+      <div class="img-wrapper">
+        <a href="{{item_url}}" class="item-img img-placeholder">
+          <img data-network="Q75s100,Q30s100" class="J_LazyLoad" alt="宝贝图片" src="data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=" data-srcset="{{item_pic}}_180x180.jpg 1x,{{item_pic}}_360x360.jpg 2x"/>
+        </a>
+        {{#if(item_declaration)}}
+        <div class="item-desc">{{item_declaration}}</div>        
+        {{/if}}
+        {{#if(item_num === 0||item_num === '0')}}
+        <div class="shouqing-icon">已售罄</div>
+        {{/if}}
+      </div>
+      <div class="item-text">
+        <p class="item-title"><a href="{{item_url}}">{{item_title}}</a></p>
+        <p class="item-current-price"><b class="jia-1212"> &nbsp;</b><span class="yen">&#65509;</span><span class="price">{{item_current_price}}</span></p>
+         <p class="item-price"><del>&#65509;{{item_price}}</del></p>
+      </div>
+
+     {{#if(item_trade_num && item_trade_num!==0 && item_trade_num !== '0')}}
+            <p class="item-favorite">已售<span>{{item_trade_num}}</span>件</p>
+     {{/if}}
+
+      {{#if(item_num.toString()==='0')}}
+        <a href="{{item_url}}" class="item-shouqing theme-btn-main">再去逛逛</a>
+      {{else}}
+          <a href="{{item_url}}" class="item-total-look theme-btn-main">立即抢购</a>
+      {{/if}}
+    </li>
+   {{/each}}
+  </ul>
+</div>

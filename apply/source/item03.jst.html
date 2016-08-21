@@ -1,0 +1,28 @@
+<div class="item-wrapper">
+  <% var start = page[0].item_time; %>
+  <ul>
+    <% $.each(page,function(index,item){ %>
+    <li class="item-03">
+      <div class="img-wrap-03 img-placeholder">
+        <a href="<%= item.item_url %>">
+          <img alt="商品图片" data-network="Q75s100,Q30s100" src="data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=" class="J_LazyLoad" data-srcset="<%= item.item_pic %>_120x120.jpg 1x,<%= item.item_pic %>_230x230.jpg 2x">
+        </a>
+        <%if(item.item_num === 0 || item.item_num === '0'){%>
+        <div class="shouqing-icon">已售罄</div>
+        <%}%>
+      </div>
+      <a href="<%= item.item_url %>" class="item-title-03"><%= item.item_title %></a>
+      <p class="item-price-03">
+        <span>&#65509;</span>
+        <span class="xianjia"><%= item.item_current_price %></span>
+      </p>
+
+      <% if(item.item_num === 0 || item.item_num === "0"){ %>
+        <a href="<%= item.item_url %>" class="item-shouqing-03 theme-btn-main">再去逛逛</a>
+      <% }else { %>
+        <a href="<%= item.item_url %>" class="item-buy-03 theme-btn-main">立即抢购</a>
+      <% } %>
+    </li>
+    <% }) %>
+  </ul>
+</div>
