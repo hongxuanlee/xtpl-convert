@@ -1,20 +1,106 @@
 'use strict';
 
+const esprima = require('esprima');
 let splitLang = require('./src/splitLang');
 
 let getJsCodePart = (lexicon) => {
-    let list = lexicon.match(/<%(.*)%>/);
+    let list = lexicon.match(/<%([\s\S]*?)%>/);
     if (list) return list[1];
 };
 
 let processJsToken = (handler) => (tokens) => tokens.map((token, index, tokens) => {
-
     if (token.type === 'jscode') {
         handler && handler(token, index, tokens);
     }
-
     return token;
 });
+
+let replaceJsCode = (jsCode, fragment, rule, flag) => {
+    jsCode = jsCode.replace(rule, (...args) => {
+        if (args[1].length) {
+            fragment.push({
+                type: 'whitespace',
+                lexicon: args[1]
+            });
+        }
+        if (args[2]) {
+            fragment.push({
+                type: 'jscode',
+                lexicon: `<%${args[2]}%>`
+            });
+        }
+        if (args[3].length) {
+            fragment.push({
+                type: 'whitespace',
+                lexicon: args[3]
+            });
+        }
+        if(args[2]){
+            return '';
+        }
+    });
+    return jsCode;
+};
+
+let analyseJs = (ast, jsCode, fragment=[]) => {
+    ast.body.forEach((item) => {
+        if(item.type === 'VariableDeclaration'){
+            jsCode = replaceJsCode(jsCode, fragment, /(\s*)([\s\S]*?\;)(\s*)/, true);
+        }else if(item.type === 'IfStatement'){
+            let stateMent = [];
+            // split if(){
+            jsCode = replaceJsCode(jsCode, fragment, /(\s*)(if\s*\(.*?\)(\s*)\{)/);
+            // statement {}
+            if(item.consequent && item.consequent.body){
+                jsCode = analyseJs(item.consequent, jsCode, fragment);
+            }
+            // split }
+            if(jsCode.match(/\s*(})\s*/)){
+                jsCode = replaceJsCode(jsCode, fragment, /(\s*)(})(\s*)/);
+            }
+        }else{
+            console.log(item.type);
+        }       
+    });
+    return jsCode
+} 
+
+let splitJsCode = (token, index, tokens, newTokens)=> {
+    let jscode = getJsCodePart(token.lexicon);
+    let fragment = [];
+    let ast;
+    try {
+        ast = esprima.parse(jscode);
+    } catch (e) {
+        //pass, not js code..
+    }
+    if (!ast) {
+        return
+    }
+    try {
+        analyseJs(ast, jscode, fragment);
+    } catch (e) {
+        console.log(e);
+    }
+    let increment = fragment.length;
+    if (increment) {
+        increment = increment - 1;
+        fragment.unshift(index, 1)
+        tokens.splice.apply(tokens, fragment);
+   }
+    return increment;
+};
+
+let splitProcess = (tokens) => {
+    let add = 0;
+    for(let i = 0; i < tokens.length; i++){
+        if (tokens[i].type === 'jscode') {
+            add = splitJsCode(tokens[i], i, tokens);
+            i = i + add;
+        }
+    }
+    return tokens;
+}
 
 let assignRule = (tokens) => tokens.map((token) => {
     if (token.type === 'assign') {
@@ -45,6 +131,7 @@ let replacePair = (rest, str, {
     symbol,
     pairSymbol
 } = {}) => {
+
     let {
         restTokenIndex,
         charIndex
@@ -195,7 +282,9 @@ module.exports = (str) => {
                         elseRule(
                             ifRule(
                                 jqueryEachRule(
-                                    assignRule(tokens)
+                                    assignRule(
+                                        splitProcess(tokens)
+                                    )
                                 )
                             )
                         )
@@ -204,15 +293,18 @@ module.exports = (str) => {
             )
         )
     );
-
+    let notProcess = [];
     let ret = tokens.reduce((prev, token) => {
         if (token.xtplLexicon) {
             prev += token.xtplLexicon;
         } else {
             prev += token.lexicon;
+            if (token.type === 'jscode') {
+                notProcess(token.lexicon);
+            }
         }
         return prev;
     }, '');
 
-    return ret;
+    return {ret,notProcess};
 };

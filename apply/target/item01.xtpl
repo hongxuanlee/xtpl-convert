@@ -1,0 +1,64 @@
+<div class="item-wrapper">
+   {{ set ( start = page[0].item_time,winRedPacket = page[0].winRedPacket,customRedPacket = page[0].customRedPacket,winManFan = page[0].winManFan,customManFan = page[0].customManFan ) }}
+    {{# if ( start === 'pre' && (winRedPacket === true || winRedPacket === 'true') && customRedPacket === 'true' ) }}
+      {{ set ( openRedPacket = true ) }}
+     {{/ if }} 
+
+    {{# if ( start === 'now' && (winManFan === true || winManFan === 'true') && customManFan ==='true' ) }}
+      {{ set ( openManFan = true ) }}
+     {{/ if }} 
+  <ul>
+    {{# each(page)}}
+{{set (item = this)}}
+    <li class="item">
+      {{ set ( item_shop_activity_url = item.item_shop_activity_url,item_shop_activity_url = item.item_shop_activity_url ) }}
+      <a  href="{{  item.item_shop_activity_url  }}" class="item-shop">
+          <span class="shop-name">{{  item.item_shop_title  }}<span>
+          <span class="shop-jiantou">&#xe604;</span>
+      </a>
+      <div class="img-wrapper">
+        <a href="{{  item.item_url  }}" class="item-img img-placeholder">
+          <img data-network="Q75s100,Q30s100" class="J_LazyLoad" alt="宝贝图片" src="data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=" data-srcset="{{  item.item_pic  }}_180x180.jpg 1x,{{  item.item_pic  }}_360x360.jpg 2x"/>
+        </a>
+        {{# if ( item.item_declaration ) }}
+        <div class="item-desc">{{  item.item_declaration  }}</div>
+         {{/ if }} 
+        {{# if ( item.item_num === 0||item.item_num === '0' ) }}
+        <div class="shouqing-icon">已售罄</div>
+         {{/ if }} 
+      </div>
+      <div class="item-text">
+        <p class="item-title"><a href="{{  item.item_url  }}">{{  item.item_title }}</a></p>
+        <p class="item-current-price"><b class="jia-1212"> &nbsp;</b><span class="yen">&#65509;</span><span class="price">{{  item.item_current_price  }}</span></p>
+         <p class="item-price"><del>&#65509;{{  item.item_price  }}</del></p>
+      </div>
+
+      {{# if ( start === 'pre' && item.item_favorite && item.item_favorite!==0 && item.item_favorite !== '0' ) }}
+          <p class="item-favorite">想买人气<span>{{  item.item_favorite  }}</span></p>
+      {{ elseif (start === 'now' && item.item_trade_num && item.item_trade_num!==0 && item.item_trade_num !== '0')}}
+            <p class="item-favorite">已售<span>{{  item.item_favorite  }}</span>件</p>
+       {{/ if }} 
+
+      {{# if ( item.item_num === 0 || item.item_num === '0' ) }}
+        <a href="{{  item.item_url  }}" class="item-shouqing">再去逛逛</a>
+      {{ else }}
+        {{# if ( start === 'pre' ) }}
+          {{# if ( openRedPacket && item.shop_hongbao && item.shop_hongbao !== '0' && item.shop_hongbao !== 0 ) }}
+           <a href="{{  item.item_shop_activity_url  }}" class="item-hongbao">领优惠券</a>
+           <a href="{{  item.item_url  }}" class="item-look theme-btn">立即查看</a>
+          {{ else }}
+            <a href="{{  item.item_url  }}" class="item-total-look theme-btn">立即查看</a>
+           {{/ if }} 
+      {{ else }}
+          {{# if ( openManFan && item.item_shop_manfan ) }}
+            <a href="{{  item.item_shop_activity_url  }}" class="item-hongbao">{{  item.item_shop_manfan  }}</a>
+            <a href="{{  item.item_url  }}" class="item-buy theme-btn">立即抢购</a>
+          {{ else }}
+            <a href="{{  item.item_url  }}" class="item-total-look theme-btn">立即抢购</a>
+           {{/ if }} 
+         {{/ if }} 
+       {{/ if }} 
+    </li>
+     {{/ if }} 
+  </ul>
+</div>

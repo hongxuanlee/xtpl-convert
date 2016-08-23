@@ -1,5 +1,5 @@
 <div class="item-wrapper">
-  {{ set ( start = page[0].item_time ) }}
+   {{ set ( start = page[0].item_time ) }} 
   <ul>
     {{# each(page)}}
 {{set (item = this)}}

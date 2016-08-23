@@ -43,7 +43,7 @@ describe('index', () => {
         <a href="<%= item.item_url %>">立即抢购</a>
     <%}else{%>
         <a href="<%= item.item_url %>" class="item-total-look theme-btn theme-btn-main">立即抢购</a>
-<%}%>
+    <%}%>
             `);
     });
 
@@ -60,22 +60,39 @@ var type = page[0].item_type,
     it('else if', () => {
         let ret = tplConvert(`
             <%if(c){%><%}else if(a){%><%} else if(b){%><%}%>
-            `).trim();
+            `).ret.trim();
         assert.equal('{{# if ( c ) }}{{ elseif (a)}}{{ elseif (b)}} {{/ if }}', ret);
     });
 
     it('!==', () => {
         let ret = tplConvert(`
             <%if(a!==b){%><%}%>
-            `).trim();
+            `).ret.trim();
         assert.equal(ret, '{{# if ( a!==b ) }} {{/ if }}');
     });
 
     it('==', () => {
         let ret = tplConvert(`
             <%if(a==b){%><%}%>
-            `).trim();
+            `).ret.trim();
         assert.equal(ret, '{{# if ( a===b ) }} {{/ if }}');
+    });
+
+    it.only('var define and if', () => {
+        let ret = tplConvert(`
+        <%var start = page[0].item_time,
+          winRedPacket = page[0].winRedPacket,
+          customRedPacket = page[0].customRedPacket,
+          winManFan = page[0].winManFan,
+          customManFan = page[0].customManFan;
+          if(start === 'pre' && (winRedPacket === true || winRedPacket === 'true') && customRedPacket === 'true'){
+            var openRedPacket = true;
+          }
+          if(start === 'now' && (winManFan === true || winManFan === 'true') && customManFan ==='true'){
+             var openManFan = true;
+          }%>
+       `);
+        console.log(ret);
     });
 
 });

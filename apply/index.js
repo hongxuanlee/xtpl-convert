@@ -18,7 +18,7 @@ readdir(sourceDir).then((files) => {
         if (file !== '.' && file !== '..' && file[0] !== '.') {
             let sourceFile = sourceDir + '/' + file;
             return readFile(sourceFile, 'utf-8').then((res) => {
-                let ret = convert(res);
+                let ret = convert(res).ret;
                 let render = new xtemplate(ret);
                 if (render.compileError) {
                     log('syntax error happend in file: ' + sourceFile);

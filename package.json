@@ -1,6 +1,6 @@
 {
   "name": "@ali/xtpl-convert",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "tpl convert",
   "main": "index.js",
   "directories": {
@@ -15,6 +15,7 @@
     "mz": "^2.4.0"
   },
   "dependencies": {
+    "esprima": "^2.7.2",
     "xtemplate": "^4.6.0"
   },
   "publishConfig": {
