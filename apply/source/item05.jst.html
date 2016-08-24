@@ -1,0 +1,7 @@
+<% for(var i = 0,len = subData.length;i<len;i++) { 
+  var subItem = subData[i];
+%> 
+<a href="<%= subItem.href %>" class="J_hyperlink">
+  <img class="item-pic" src="data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=" data-network="Q75s100,Q50s100" data-src="<%= subItem.placePic %>_240x240.jpg 1x,<%= subItem.placePic %>_240x240.jpg 2x,<%= subItem.placePic %>_360x360.jpg 3x" />
+</a>
+<% } %>

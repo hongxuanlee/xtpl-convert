@@ -17,7 +17,7 @@ tnpm test
 ### usage
 
 ```
-const xtplConvert = require('@ali/xtplConvert');
+const xtplConvert = require('@ali/xtpl-convert');
 let outStr = xtplConvert(inStr);
 ```
 

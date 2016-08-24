@@ -60,7 +60,7 @@ var type = page[0].item_type,
     it('else if', () => {
         let ret = tplConvert(`
             <%if(c){%><%}else if(a){%><%} else if(b){%><%} else {%><%}%>
-            `).ret.trim();
+            `).trim();
         console.log(ret);
         assert.equal('{{# if ( c ) }}{{ elseif (a)}}{{ elseif (b)}}{{ else }} {{/ if }}', ret);
 
@@ -69,14 +69,14 @@ var type = page[0].item_type,
     it('!==', () => {
         let ret = tplConvert(`
             <%if(a!==b){%><%}%>
-            `).ret.trim();
+            `).trim();
         assert.equal(ret, '{{# if ( a!==b ) }} {{/ if }}');
     });
 
     it('==', () => {
         let ret = tplConvert(`
             <%if(a==b){%><%}%>
-            `).ret.trim();
+            `).trim();
         assert.equal(ret, '{{# if ( a===b ) }} {{/ if }}');
     });
 
@@ -97,7 +97,7 @@ var type = page[0].item_type,
         console.log(ret);
     });
 
-    it.only('if else', () => {
+    it('if else', () => {
         let ret = tplConvert(`
           <% if(item.item_shop_activity_url && item.item_shop_activity_url.indexOf('?') !== -1){
           item.item_shop_activity_url = item.item_shop_activity_url + '&cpp=0'
@@ -107,6 +107,20 @@ var type = page[0].item_type,
        `);
         console.log(ret);
     });
+
+    it('for', () => {
+        let ret = tplConvert(`
+          <% for(var i = 0,len = subData.length;i<len;i++) { 
+              var subItem = subData[i];
+          %> 
+          <a href="<%= subItem.href %>" class="J_hyperlink">
+          <img class="item-pic" src="data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=" data-network="Q75s100,Q50s100" data-src="<%= subItem.placePic %>_240x240.jpg 1x,<%= subItem.placePic %>_240x240.jpg 2x,<%= subItem.placePic %>_360x360.jpg 3x" />
+           </a>
+           <% } %>
+       `);
+        console.log(ret);
+    });
+
 });
 
 

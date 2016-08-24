@@ -41,6 +41,73 @@ let jqueryEachRule = processJsToken((token, index, tokens) => {
     }
 });
 
+let processChangeArr = (handler) => (tokens) => {
+    let add = 0;
+    for(let i = 0; i < tokens.length; i++){
+        if (tokens[i].type === 'jscode') {
+            add = handler && handler(tokens[i], i, tokens);
+            i = i + add;
+        }
+    }
+    return tokens;
+};
+
+// <% for(var i = 0,len = itemData.length;i<len;i++) {
+//       var item = itemData[i];
+//   %>
+let forRule = processChangeArr((token, index, tokens) => {
+    if(token.xtplLexicon){
+        return 0;
+    }
+    let increment = 0;
+    let jscode = getJsCodePart(token.lexicon);
+    let addToken = [];
+    if (jscode) {
+        jscode = jscode.trim();
+        let list = jscode.match(/for\s*\(([\s\S]*?)\)\s*\{([\s\S]*?$)/);
+        if (list) {
+            // find the pair }
+            let rest = tokens.slice(index + 1);
+            let {start, end} = {};
+            let condition = list[1];
+            let statement = list[2];
+                if (condition) {
+                    let cList = condition.split(';');
+                    addToken.push({
+                        type: 'jscode',
+                        lexicon: `<%${cList[0]};%>`
+                    });
+                    if(cList[1]){
+                       let variable = cList[1].match(/\s*([a-z|A-Z|\_|\$]*?)([<>])([a-z|A-Z|\_|\$]*)\s*/);
+                       if(variable[0]){
+                          if(variable[2] === '<'){
+                             start = variable[1];
+                             end = variable[3];
+                          }else{
+                             end = variable[1];
+                             start = variable[3];
+                          }
+                       }
+                    }
+                    addToken.push(token);
+                    if (statement) {
+                        addToken.push({
+                           type: 'jscode',
+                           lexicon: `<%${statement}%>`
+                        });
+                    }
+                    increment = addToken.length - 1;
+                    addToken.unshift(index, 1);
+                    tokens.splice.apply(tokens, addToken);
+                }    
+            token.xtplLexicon = `{{# each(range(${start}, ${end}))}}\n{{set (${start} = this)}}`;
+            replacePair(rest, '}} {{/ each }} {{');
+        }
+    }
+    return increment;
+});
+
+
 let replacePair = (rest, str, {
     symbol,
     pairSymbol
@@ -51,14 +118,9 @@ let replacePair = (rest, str, {
         charIndex
     } = findPairLine(rest, symbol, pairSymbol);
     let pairToken = rest[restTokenIndex];
-    // if(isif && pairToken.xtplLexicon){
-    //     console.log('rest', rest);
-    //     console.log('isif', pairToken);
-    // }
     let pairChars = pairToken.lexicon.split('');
     pairChars.splice(charIndex, 1, str);
     pairToken.xtplLexicon = pairChars.join('');
-    // console.log(pairToken.xtplLexicon);
 };
 
 let ifRule = processJsToken((token, index, tokens) => {
@@ -154,12 +216,15 @@ let replaceDelimiter = (lexicon) => {
 };
 
 let varDefineRule = processJsToken((token) => {
+     if(token.xtplLexicon){
+        return;
+    }
     let lexicon = token.lexicon;
     let set = [];
     let replace = (str) => {
         // get all var definitions
-        str.replace(/(?:\s*var\s+|\s*)\s*([a-z|A-Z|\_|\$][a-z|A-Z|0-9|_|\$]*)\s*\=\s*([a-z|A-Z|\_|\$].*?)[,|;|\s]/, (...args) => {
-            if (args[0]) {
+        str.replace(/(?:\s*var\s+|\s*)\s*([a-z|A-Z|\_|\$][a-z|A-Z|0-9|_|\$]*)\s*\=\s*(.*?)[,|;|\s]/, (...args) => {
+          if (args[0]) {
                 let nextStr = str.substring(args[3] + args[0].length);
                 set.push(`${args[1]} = ${args[2]}`);
                 replace(nextStr);
@@ -200,9 +265,11 @@ module.exports = (str) => {
                         elseIfRule(
                            ifRule(
                                jqueryEachRule(
+                                  forRule(
                                     assignRule(
                                         splitJs.splitProcess(tokens)
                                     )
+                                  )
                                 )
                             )
                         )
@@ -211,19 +278,14 @@ module.exports = (str) => {
             )
         )
     );
-
-    let notProcess = [];
     let ret = tokens.reduce((prev, token) => {
         if (token.xtplLexicon) {
             prev += token.xtplLexicon;
         } else {
             prev += token.lexicon;
-            if (token.type === 'jscode') {
-                notProcess.push(token.lexicon);
-            }
         }
         return prev;
     }, '');
 
-    return {ret, notProcess};
+    return ret;
 };

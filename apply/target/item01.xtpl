@@ -14,9 +14,9 @@
 {{set (item = this)}}
     <li class="item">
        {{# if ( item.item_shop_activity_url && item.item_shop_activity_url.indexOf('?') !== -1 ) }}
-          {{ set ( item_shop_activity_url = item.item_shop_activity_url ) }}
+          {{ set ( item_shop_activity_url = item.item_shop_activity_url,cpp = 0' ) }}
          {{ else }}
-           {{ set ( item_shop_activity_url = item.item_shop_activity_url ) }}
+           {{ set ( item_shop_activity_url = item.item_shop_activity_url,cpp = 0' ) }}
        {{/ if }} 
       <a  href="{{  item.item_shop_activity_url  }}" class="item-shop">
           <span class="shop-name">{{  item.item_shop_title  }}<span>

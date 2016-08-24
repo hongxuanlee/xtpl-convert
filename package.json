@@ -1,6 +1,6 @@
 {
   "name": "@ali/xtpl-convert",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "xtpl convert",
   "main": "index.js",
   "directories": {

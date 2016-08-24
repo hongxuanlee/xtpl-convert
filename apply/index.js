@@ -15,13 +15,10 @@ let log = console.log; // eslint-disable-line
 
 readdir(sourceDir).then((files) => {
     return Promise.all(files.map((file) => {
-        if(file !== 'item01.jst.html'){
-            return
-        }
         if (file !== '.' && file !== '..' && file[0] !== '.') {
             let sourceFile = sourceDir + '/' + file;
             return readFile(sourceFile, 'utf-8').then((res) => {
-                let ret = convert(res).ret;
+                let ret = convert(res);
                 let render = new xtemplate(ret);
                 if (render.compileError) {
                     log('syntax error happend in file: ' + sourceFile);

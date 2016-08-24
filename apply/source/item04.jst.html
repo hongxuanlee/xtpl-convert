@@ -1,0 +1,64 @@
+<div class="km-slider" id="slider">
+<div class="km-slider-outer">
+
+<ul class="seckill-list J_seckillList">
+  <% for(var i = 0,len = itemData.length;i<len;i++) {
+      var item = itemData[i];
+  %>
+  <li data-index="<%= i %>">
+   <div class="seckill-item J_seckillItem" data-timestr="<%= timeStr %>">
+    <a href="<%= item.item_shop_url %>" target="_blank" class="item-shopTitle">
+      <em class="shopTitle-content"><%= item.item_shop_title %></em><em class="shopTitle-right iconfont">&#xe604;</em>
+    </a>
+    <div class="item-info J_itemInfo">
+      <a href="<%= item.item_origin_url %>" target="_blank" class="info-img J_infoImg img-placeholder">
+        <img src="data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=" alt="<%= item.item_title %>" data-src="<%= item.item_pic %>_<%= isH199? '200x200':'160x160' %>.jpg">
+        <!-- 长图的裁剪 -->
+        <span class="info-num">
+          限量<em><%= item.item_num %></em>件
+        </span>
+      </a>
+      <div class="infoWrap">
+        <a href="//item.taobao.com/item.htm?id=37331779620" target="_blank" class="info-title J_infoTitle"><%= item.item_title %></a>
+        <span class="info-price">
+
+          <em class="price-tip">秒杀价:</em>
+          <em class="price-current">&#65509;<%= item.item_current_price %></em>
+        </span>
+        <em class="price-origin">&#65509;<%= item.item_price %></em>
+
+        <span class="info-time">
+          <em class="time-tip J_timeTip"></em>
+          <span class="clockWrap J_clockWrap">
+            <% if(i == 0) { %> 
+            <span class="clock J_itemCountdown cd cd-medium cd-slide">
+             
+            </span>
+            <% } %>
+          </span> 
+      </span>
+        <div class="info-btn J_infoBtn">
+          <% if(itemStatus == 'future') {%>
+            <a data-id="<%= item.item_numiid %>" href="<%= item.item_origin_url %>" target="_blank" class="btn-look J_btnLook">立即查看</a>
+            <% if(!item.notified){ %>
+              <a href="javascript:void(0)" class="btn-notify J_btnNotify">提醒我</a>
+            <% }else{ %> 
+              <a href="javascript:void(0)" class="btn-notify J_btnNotify notified">已设置提醒</a>
+            <% } %>
+          <% } %>
+          <% if(itemStatus == 'current') { %> 
+            <a href="<%= item.item_origin_url %>" target="_blank" class="btn-current theme-btn">立即秒杀</a>
+          <% }%>
+          <% if(itemStatus == 'end') { %>
+            <a href="<%= item.item_shop_url %>" class="btn-end">再去逛逛</a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+
+<% } %>
+</ul>
+</div>
+</div>
