@@ -25,3 +25,10 @@ let outStr = xtplConvert(inStr);
 
 * 覆盖更多模板业务场景
 
+### history
+
+* 2016-08-24 增加对js代码块if,statement逻辑判断，增加对for语法的支持。
+
+
+
+

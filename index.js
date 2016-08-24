@@ -112,7 +112,6 @@ let replacePair = (rest, str, {
     symbol,
     pairSymbol
 } = {}, isif) => {
-    
     let {
         restTokenIndex,
         charIndex
@@ -151,7 +150,6 @@ let elseIfRule = processJsToken((token, index, tokens) => {
         }
     }
 });
-
 
 let elseRule = processJsToken((token, index, tokens) => {
     let {
@@ -223,7 +221,7 @@ let varDefineRule = processJsToken((token) => {
     let set = [];
     let replace = (str) => {
         // get all var definitions
-        str.replace(/(?:\s*var\s+|\s*)\s*([a-z|A-Z|\_|\$][a-z|A-Z|0-9|_|\$]*)\s*\=\s*(.*?)[,|;|\s]/, (...args) => {
+        str.replace(/(?:\s*var\s+|\s*)\s*([a-z|A-Z|\_|\$][a-z|A-Z|0-9|_|\$]*)\s*\=\s*([a-z|A-Z|0-9|_|\$\.\[\]]*)[,|;|\s]/, (...args) => {
           if (args[0]) {
                 let nextStr = str.substring(args[3] + args[0].length);
                 set.push(`${args[1]} = ${args[2]}`);
@@ -252,19 +250,20 @@ let clean = processJsToken((token) => {
     if (token.xtplLexicon) {
         token.xtplLexicon = token.xtplLexicon.replace(/\{\{\s*\}\}/g, '');
         token.xtplLexicon = token.xtplLexicon.replace(/\{\{\s*\)\s*\}\}/g, '');
+        token.xtplLexicon = token.xtplLexicon.replace(/\{\{\s*\)\;\s*\}\}/g, '');
     }
 });
 
 module.exports = (str) => {
     let tokens = splitLang(str);
     tokens = clean(
-      lastDelimiterRule(
+       lastDelimiterRule(
             equalSignRule(
                varDefineRule(
                     elseRule(
                         elseIfRule(
                            ifRule(
-                               jqueryEachRule(
+                               tokens = jqueryEachRule(
                                   forRule(
                                     assignRule(
                                         splitJs.splitProcess(tokens)

@@ -1,0 +1,106 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/kino/deps/.nvm/versions/node/v6.3.0/bin/node',
+1 verbose cli   '/Users/kino/deps/.nvm/versions/node/v6.3.0/lib/node_modules/tnpm/node_modules/npm/bin/npm-cli.js',
+1 verbose cli   '--cache=/Users/kino/.tnpm',
+1 verbose cli   '--node_sqlite3_binary_host_mirror=https://tnpm-hz.oss-cn-hangzhou.aliyuncs.com/dist/',
+1 verbose cli   '--fse_binary_host_mirror=https://tnpm-hz.oss-cn-hangzhou.aliyuncs.com/dist/fsevents/',
+1 verbose cli   '--no-proxy',
+1 verbose cli   '--disturl=https://tnpm-hz.oss-cn-hangzhou.aliyuncs.com/dist/node',
+1 verbose cli   '--userconfig=/Users/kino/.tnpmrc',
+1 verbose cli   '--registry=http://registry.npm.alibaba-inc.com',
+1 verbose cli   'publish' ]
+2 info using npm@2.15.10
+3 info using node@v6.3.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/kino/taobao/xtplConvert',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/kino/.tnpm/@ali/xtpl-convert/0.0.3/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/kino/.tnpm correctMkdir not in flight; initializing
+10 verbose tar pack [ '/Users/kino/.tnpm/@ali/xtpl-convert/0.0.3/package.tgz',
+10 verbose tar pack   '/Users/kino/taobao/xtplConvert' ]
+11 verbose tarball /Users/kino/.tnpm/@ali/xtpl-convert/0.0.3/package.tgz
+12 verbose folder /Users/kino/taobao/xtplConvert
+13 info prepublish @ali/xtpl-convert@0.0.3
+14 verbose addLocalTarball adding from inside cache /Users/kino/.tnpm/@ali/xtpl-convert/0.0.3/package.tgz
+15 verbose correctMkdir /Users/kino/.tnpm correctMkdir not in flight; initializing
+16 silly cache afterAdd @ali/xtpl-convert@0.0.3
+17 verbose afterAdd /Users/kino/.tnpm/@ali/xtpl-convert/0.0.3/package/package.json not in flight; writing
+18 verbose correctMkdir /Users/kino/.tnpm correctMkdir not in flight; initializing
+19 verbose afterAdd /Users/kino/.tnpm/@ali/xtpl-convert/0.0.3/package/package.json written
+20 silly publish { name: '@ali/xtpl-convert',
+20 silly publish   version: '0.0.3',
+20 silly publish   description: 'xtpl convert',
+20 silly publish   main: 'index.js',
+20 silly publish   directories: { test: 'test' },
+20 silly publish   scripts: { test: 'mocha test/**/*.js' },
+20 silly publish   author: { name: '宣予' },
+20 silly publish   devDependencies: { mocha: '^3.0.2', mz: '^2.4.0' },
+20 silly publish   dependencies: { esprima: '^2.7.2', xtemplate: '^4.6.0' },
+20 silly publish   publishConfig: { registry: 'http://registry.npm.alibaba-inc.com' },
+20 silly publish   readme: '## jst -> xtpl 简单的转换工具\n\n* 由于jst语法比xtpl更自由，无法完全覆盖所有场景，只能简单转换常用规则\n* 规则枚举在index.js中\n* 输入为jst模板的字符串，输出为xtpl模板的字符串\n\n### install\n```\nnpm install --save @ali/xtplConvert\n```\n\n### test\n```\ntnpm test\n```\n\n### usage\n\n```\nconst xtplConvert = require(\'@ali/xtpl-convert\');\nlet outStr = xtplConvert(inStr);\n```\n\n### todo\n\n* 覆盖更多模板业务场景\n\n### history\n\n* 2016-08-24 增加对js代码块if,statement逻辑判断，增加对for语法的支持。\n\n\n\n\n',
+20 silly publish   readmeFilename: 'README.md',
+20 silly publish   gitHead: '88ebdb0cc0f94796d7ec41a0a4103907e99f69bd',
+20 silly publish   _id: '@ali/xtpl-convert@0.0.3',
+20 silly publish   _shasum: 'a40de3a311d98c04ac148420c1a6d875086e2fc2',
+20 silly publish   _from: '.' }
+21 verbose getPublishConfig { registry: 'http://registry.npm.alibaba-inc.com' }
+22 silly mapToRegistry name @ali/xtpl-convert
+23 silly mapToRegistry scope (from package name) @ali
+24 verbose mapToRegistry no registry URL found in name for scope @ali
+25 silly mapToRegistry using default registry
+26 silly mapToRegistry registry http://registry.npm.alibaba-inc.com
+27 silly mapToRegistry data Result {
+27 silly mapToRegistry   raw: '@ali/xtpl-convert',
+27 silly mapToRegistry   scope: '@ali',
+27 silly mapToRegistry   name: '@ali/xtpl-convert',
+27 silly mapToRegistry   rawSpec: '',
+27 silly mapToRegistry   spec: 'latest',
+27 silly mapToRegistry   type: 'tag' }
+28 silly mapToRegistry uri http://registry.npm.alibaba-inc.com/@ali%2fxtpl-convert
+29 verbose publish registryBase http://registry.npm.alibaba-inc.com/
+30 silly publish uploading /Users/kino/.tnpm/@ali/xtpl-convert/0.0.3/package.tgz
+31 verbose request uri http://registry.npm.alibaba-inc.com/@ali%2fxtpl-convert
+32 verbose request sending authorization for write operation
+33 info attempt registry request try #1 at 1:53:04 PM
+34 verbose request id ab18f3ee2c3736f1
+35 http request PUT http://registry.npm.alibaba-inc.com/@ali%2fxtpl-convert
+36 http 403 http://registry.npm.alibaba-inc.com/@ali%2fxtpl-convert
+37 verbose headers { server: 'Tengine',
+37 verbose headers   date: 'Wed, 24 Aug 2016 05:53:04 GMT',
+37 verbose headers   'content-type': 'application/json; charset=utf-8',
+37 verbose headers   'content-length': '74',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-current-requests': '257',
+37 verbose headers   'x-readtime': '135' }
+38 verbose request invalidating /Users/kino/.tnpm/registry.npm.alibaba-inc.com/_40ali_252fxtpl-convert on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: forbidden cannot modify pre-existing version: 0.0.3: @ali/xtpl-convert
+40 verbose stack     at makeError (/Users/kino/deps/.nvm/versions/node/v6.3.0/lib/node_modules/tnpm/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/Users/kino/deps/.nvm/versions/node/v6.3.0/lib/node_modules/tnpm/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+40 verbose stack     at Request._callback (/Users/kino/deps/.nvm/versions/node/v6.3.0/lib/node_modules/tnpm/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+40 verbose stack     at Request.self.callback (/Users/kino/deps/.nvm/versions/node/v6.3.0/lib/node_modules/tnpm/node_modules/npm/node_modules/request/request.js:187:22)
+40 verbose stack     at emitTwo (events.js:106:13)
+40 verbose stack     at Request.emit (events.js:191:7)
+40 verbose stack     at Request.<anonymous> (/Users/kino/deps/.nvm/versions/node/v6.3.0/lib/node_modules/tnpm/node_modules/npm/node_modules/request/request.js:1044:10)
+40 verbose stack     at emitOne (events.js:96:13)
+40 verbose stack     at Request.emit (events.js:188:7)
+40 verbose stack     at IncomingMessage.<anonymous> (/Users/kino/deps/.nvm/versions/node/v6.3.0/lib/node_modules/tnpm/node_modules/npm/node_modules/request/request.js:965:12)
+41 verbose statusCode 403
+42 verbose pkgid @ali/xtpl-convert
+43 verbose cwd /Users/kino/taobao/xtplConvert
+44 error Darwin 15.0.0
+45 error argv "/Users/kino/deps/.nvm/versions/node/v6.3.0/bin/node" "/Users/kino/deps/.nvm/versions/node/v6.3.0/lib/node_modules/tnpm/node_modules/npm/bin/npm-cli.js" "--cache=/Users/kino/.tnpm" "--node_sqlite3_binary_host_mirror=https://tnpm-hz.oss-cn-hangzhou.aliyuncs.com/dist/" "--fse_binary_host_mirror=https://tnpm-hz.oss-cn-hangzhou.aliyuncs.com/dist/fsevents/" "--no-proxy" "--disturl=https://tnpm-hz.oss-cn-hangzhou.aliyuncs.com/dist/node" "--userconfig=/Users/kino/.tnpmrc" "--registry=http://registry.npm.alibaba-inc.com" "publish"
+46 error node v6.3.0
+47 error npm  v2.15.10
+48 error code E403
+49 error forbidden cannot modify pre-existing version: 0.0.3: @ali/xtpl-convert
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
