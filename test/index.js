@@ -59,9 +59,11 @@ var type = page[0].item_type,
 
     it('else if', () => {
         let ret = tplConvert(`
-            <%if(c){%><%}else if(a){%><%} else if(b){%><%}%>
+            <%if(c){%><%}else if(a){%><%} else if(b){%><%} else {%><%}%>
             `).ret.trim();
-        assert.equal('{{# if ( c ) }}{{ elseif (a)}}{{ elseif (b)}} {{/ if }}', ret);
+        console.log(ret);
+        assert.equal('{{# if ( c ) }}{{ elseif (a)}}{{ elseif (b)}}{{ else }} {{/ if }}', ret);
+
     });
 
     it('!==', () => {
@@ -78,7 +80,7 @@ var type = page[0].item_type,
         assert.equal(ret, '{{# if ( a===b ) }} {{/ if }}');
     });
 
-    it.only('var define and if', () => {
+    it('var define and if', () => {
         let ret = tplConvert(`
         <%var start = page[0].item_time,
           winRedPacket = page[0].winRedPacket,
@@ -95,4 +97,16 @@ var type = page[0].item_type,
         console.log(ret);
     });
 
+    it.only('if else', () => {
+        let ret = tplConvert(`
+          <% if(item.item_shop_activity_url && item.item_shop_activity_url.indexOf('?') !== -1){
+          item.item_shop_activity_url = item.item_shop_activity_url + '&cpp=0'
+        }else{
+           item.item_shop_activity_url = item.item_shop_activity_url + '?cpp=0'
+          } %>
+       `);
+        console.log(ret);
+    });
 });
+
+

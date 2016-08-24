@@ -7,11 +7,17 @@
     {{# if ( start === 'now' && (winManFan === true || winManFan === 'true') && customManFan ==='true' ) }}
       {{ set ( openManFan = true ) }}
      {{/ if }} 
+
+
   <ul>
     {{# each(page)}}
 {{set (item = this)}}
     <li class="item">
-      {{ set ( item_shop_activity_url = item.item_shop_activity_url,item_shop_activity_url = item.item_shop_activity_url ) }}
+       {{# if ( item.item_shop_activity_url && item.item_shop_activity_url.indexOf('?') !== -1 ) }}
+          {{ set ( item_shop_activity_url = item.item_shop_activity_url ) }}
+         {{ else }}
+           {{ set ( item_shop_activity_url = item.item_shop_activity_url ) }}
+       {{/ if }} 
       <a  href="{{  item.item_shop_activity_url  }}" class="item-shop">
           <span class="shop-name">{{  item.item_shop_title  }}<span>
           <span class="shop-jiantou">&#xe604;</span>
@@ -59,6 +65,6 @@
          {{/ if }} 
        {{/ if }} 
     </li>
-     {{/ if }} 
+     {{/ each }} 
   </ul>
 </div>

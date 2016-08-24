@@ -1,7 +1,7 @@
 'use strict';
 
-const esprima = require('esprima');
-let splitLang = require('./src/splitLang');
+const splitLang = require('./src/splitLang');
+const splitJs = require('./src/splitJs');
 
 let getJsCodePart = (lexicon) => {
     let list = lexicon.match(/<%([\s\S]*?)%>/);
@@ -15,92 +15,6 @@ let processJsToken = (handler) => (tokens) => tokens.map((token, index, tokens) 
     return token;
 });
 
-let replaceJsCode = (jsCode, fragment, rule, flag) => {
-    jsCode = jsCode.replace(rule, (...args) => {
-        if (args[1].length) {
-            fragment.push({
-                type: 'whitespace',
-                lexicon: args[1]
-            });
-        }
-        if (args[2]) {
-            fragment.push({
-                type: 'jscode',
-                lexicon: `<%${args[2]}%>`
-            });
-        }
-        if (args[3].length) {
-            fragment.push({
-                type: 'whitespace',
-                lexicon: args[3]
-            });
-        }
-        if(args[2]){
-            return '';
-        }
-    });
-    return jsCode;
-};
-
-let analyseJs = (ast, jsCode, fragment=[]) => {
-    ast.body.forEach((item) => {
-        if(item.type === 'VariableDeclaration'){
-            jsCode = replaceJsCode(jsCode, fragment, /(\s*)([\s\S]*?\;)(\s*)/, true);
-        }else if(item.type === 'IfStatement'){
-            let stateMent = [];
-            // split if(){
-            jsCode = replaceJsCode(jsCode, fragment, /(\s*)(if\s*\(.*?\)(\s*)\{)/);
-            // statement {}
-            if(item.consequent && item.consequent.body){
-                jsCode = analyseJs(item.consequent, jsCode, fragment);
-            }
-            // split }
-            if(jsCode.match(/\s*(})\s*/)){
-                jsCode = replaceJsCode(jsCode, fragment, /(\s*)(})(\s*)/);
-            }
-        }else{
-            console.log(item.type);
-        }       
-    });
-    return jsCode
-} 
-
-let splitJsCode = (token, index, tokens, newTokens)=> {
-    let jscode = getJsCodePart(token.lexicon);
-    let fragment = [];
-    let ast;
-    try {
-        ast = esprima.parse(jscode);
-    } catch (e) {
-        //pass, not js code..
-    }
-    if (!ast) {
-        return
-    }
-    try {
-        analyseJs(ast, jscode, fragment);
-    } catch (e) {
-        console.log(e);
-    }
-    let increment = fragment.length;
-    if (increment) {
-        increment = increment - 1;
-        fragment.unshift(index, 1)
-        tokens.splice.apply(tokens, fragment);
-   }
-    return increment;
-};
-
-let splitProcess = (tokens) => {
-    let add = 0;
-    for(let i = 0; i < tokens.length; i++){
-        if (tokens[i].type === 'jscode') {
-            add = splitJsCode(tokens[i], i, tokens);
-            i = i + add;
-        }
-    }
-    return tokens;
-}
 
 let assignRule = (tokens) => tokens.map((token) => {
     if (token.type === 'assign') {
@@ -130,17 +44,21 @@ let jqueryEachRule = processJsToken((token, index, tokens) => {
 let replacePair = (rest, str, {
     symbol,
     pairSymbol
-} = {}) => {
-
+} = {}, isif) => {
+    
     let {
         restTokenIndex,
         charIndex
     } = findPairLine(rest, symbol, pairSymbol);
     let pairToken = rest[restTokenIndex];
+    // if(isif && pairToken.xtplLexicon){
+    //     console.log('rest', rest);
+    //     console.log('isif', pairToken);
+    // }
     let pairChars = pairToken.lexicon.split('');
-
     pairChars.splice(charIndex, 1, str);
     pairToken.xtplLexicon = pairChars.join('');
+    // console.log(pairToken.xtplLexicon);
 };
 
 let ifRule = processJsToken((token, index, tokens) => {
@@ -153,7 +71,7 @@ let ifRule = processJsToken((token, index, tokens) => {
             token.xtplLexicon = `{{# if ( ${list[1]} ) }}`;
             //
             let rest = tokens.slice(index + 1);
-            replacePair(rest, '}} {{/ if }} {{');
+            replacePair(rest, '}} {{/ if }} {{', {}, true);
         }
     }
 });
@@ -178,7 +96,7 @@ let elseRule = processJsToken((token, index, tokens) => {
         type, lexicon
     } = token;
     if (type === 'jscode') {
-        let list = lexicon.match(/\s*else\s*\{/);
+        let list = lexicon.match(/\s*\}\s*else\s*\{/);
         if (list) {
             token.xtplLexicon = '{{ else }}';
             let rest = tokens.slice(index + 1);
@@ -198,7 +116,7 @@ let findPairLine = (tokens, symbol = '{', pairSymbol = '}') => {
             if (item === symbol) {
                 stackLen++;
             } else if (item === pairSymbol) {
-                if (stackLen === 0) { // find the one
+                if (stackLen === 0) {  // find the one
                     return {
                         restTokenIndex: i,
                         charIndex: j
@@ -275,15 +193,15 @@ let clean = processJsToken((token) => {
 module.exports = (str) => {
     let tokens = splitLang(str);
     tokens = clean(
-        lastDelimiterRule(
+      lastDelimiterRule(
             equalSignRule(
-                varDefineRule(
-                    elseIfRule(
-                        elseRule(
-                            ifRule(
-                                jqueryEachRule(
+               varDefineRule(
+                    elseRule(
+                        elseIfRule(
+                           ifRule(
+                               jqueryEachRule(
                                     assignRule(
-                                        splitProcess(tokens)
+                                        splitJs.splitProcess(tokens)
                                     )
                                 )
                             )
@@ -293,6 +211,7 @@ module.exports = (str) => {
             )
         )
     );
+
     let notProcess = [];
     let ret = tokens.reduce((prev, token) => {
         if (token.xtplLexicon) {
@@ -300,11 +219,11 @@ module.exports = (str) => {
         } else {
             prev += token.lexicon;
             if (token.type === 'jscode') {
-                notProcess(token.lexicon);
+                notProcess.push(token.lexicon);
             }
         }
         return prev;
     }, '');
 
-    return {ret,notProcess};
+    return {ret, notProcess};
 };

@@ -1,6 +1,5 @@
 
-{{ set ( type = page[0].item_type,jinbi = page[0].item_jinbi,liHeight = page[0].item_liheight,isshowdeclaration = page[0].isshowdeclaration,isShowShop = page[0].isShowShop,imgHeight = page[0].item_imgheight,isopenwindow = page[0].openwindow ) }}
-
+{{ set ( type = page[0].item_type,jinbi = page[0].item_jinbi,liHeight = page[0].item_liheight,isshowdeclaration = page[0].isshowdeclaration,isShowShop = page[0].isShowShop,imgHeight = page[0].item_imgheight ) }}
 
 <div class="item-wrapper">
   <ul class="clearfix li-wrapper">

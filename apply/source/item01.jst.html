@@ -18,9 +18,9 @@
     <li class="item">
       <% if(item.item_shop_activity_url && item.item_shop_activity_url.indexOf('?') !== -1){
           item.item_shop_activity_url = item.item_shop_activity_url + '&cpp=0'
-        }else{
+         }else{
            item.item_shop_activity_url = item.item_shop_activity_url + '?cpp=0'
-          } %>
+      }%>
       <a  href="<%= item.item_shop_activity_url %>" class="item-shop">
           <span class="shop-name"><%= item.item_shop_title %><span>
           <span class="shop-jiantou">&#xe604;</span>
